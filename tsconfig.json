@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "lib": ["es2016", "dom"],
+        "module": "es2015",
+        "moduleResolution": "node",
+        "jsx": "react",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "types": [],
+        "experimentalDecorators": true,
+        "allowJs": true
+    },
+    "include": [
+        "js/src/**/*.ts",
+        "js/src/**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

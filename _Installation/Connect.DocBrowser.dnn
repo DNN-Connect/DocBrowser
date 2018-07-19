@@ -1,0 +1,33 @@
+<dotnetnuke type="Package" version="5.0">
+ <packages>
+  <package name="DocBrowser" type="Module" version="00.00.01">
+   <components>
+    <component type="Module">
+     <desktopModule>
+      <moduleName>Connect_DocBrowser</moduleName>
+      <foldername>Connect/DocBrowser</foldername>
+      <supportedFeatures />
+      <moduleDefinitions>
+       <moduleDefinition>
+        <friendlyName>Connect DocBrowser</friendlyName>
+        <defaultCacheTime>0</defaultCacheTime>
+        <moduleControls>
+         <moduleControl>
+          <controlKey />
+          <controlSrc>Connect.DNN.Modules.DocBrowser.Controllers/Home/Index.mvc</controlSrc>
+          <supportsPartialRendering>False</supportsPartialRendering>
+          <controlTitle />
+          <controlType>View</controlType>
+          <iconFile />
+          <helpUrl />
+          <viewOrder>0</viewOrder>
+         </moduleControl>
+        </moduleControls>
+       </moduleDefinition>
+      </moduleDefinitions>
+     </desktopModule>
+    </component>
+   </components>
+  </package>
+ </packages>
+</dotnetnuke>
