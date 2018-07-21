@@ -1,64 +1,56 @@
 {
-    "name": "docbrowser",
-    "version": "01.00.00",
-    "description": "DNN DocBrowser module",
-    "dnn": {
-        "projectType": "module",
-        "fullName": "Connect.DocBrowser",
-        "friendlyName": "DocBrowser Module",
-        "packageName": "Connect_DocBrowser",
-        "owner": {
-            "name": "Peter Donker",
-            "organization": "Connect",
-            "url": "http://www.bring2mind.net.org",
-            "email": "info@bring2mind.net"
-        },
-        "module": {
-            "packageName": "Connect_DocBrowser",
-            "folderName": "MVC/Connect/DocBrowser",
-            "azureCompatible": "true",
-            "iconFile": "DesktopModules\\MVC\\Connect\\DocBrowser\\docbrowser.png"
-        },
-        "tempPath": "./package",
-        "packagesPath": "./_Packages",
-        "pathToAssemblies": "./bin",
-        "pathToScripts": "./_Installation/SQL",
-        "pathToSupplementaryFiles": "./_Installation",
-        "excludeFilter": [
-            "node_modules",
-            "bin",
-            "obj"
-        ]
+  "name": "docbrowser",
+  "version": "01.00.00",
+  "description": "DNN DocBrowser module",
+  "dnn": {
+    "projectType": "module",
+    "dnnDependency": "08.00.00",
+    "name": "Connect.DocBrowser",
+    "friendlyName": "DocBrowser Module",
+    "packageName": "Connect_DocBrowser",
+    "folder": "MVC/Connect/DocBrowser",
+    "iconFile": "DesktopModules\\MVC\\Connect\\DocBrowser\\docbrowser.png",
+    "owner": {
+      "name": "Peter Donker",
+      "organization": "Connect",
+      "url": "http://www.bring2mind.net.org",
+      "email": "info@bring2mind.net"
     },
-    "main": "index.js",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Connect/DocBrowser.git"
+    "module": {
+      "azureCompatible": "true"
     },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/Connect/DocBrowser/issues"
-    },
-    "homepage": "https://github.com/Connect/DocBrowser#readme",
-    "scripts": {
-        "build": "node_modules\\.bin\\webpack",
-        "watch": "node_modules\\.bin\\webpack --progress --colors --watch"
-    },
-    "devDependencies": {
-        "@types/jquery": "^3.3.4",
-        "@types/react": "^16.4.6",
-        "@types/react-dom": "^16.0.6",
-        "@types/react-router-dom": "^4.2.7",
-        "jquery": "^3.3.1",
-        "webpack": "3.12.0"
-    },
-    "dependencies": {
-        "react": "^16.4.1",
-        "react-dom": "^16.4.1",
-        "react-router": "^4.3.1",
-        "react-router-dom": "^4.3.1",
-        "ts-loader": "3.5.0",
-        "typescript": "^2.9.2"
-    }
+    "packagesPath": "./_Packages",
+    "pathToScripts": "./_Installation/SQL",
+    "pathToSupplementaryFiles": "./_Installation",
+    "pathToAssemblies": "./bin",
+    "excludeFilter": [
+      "_BuildSupport",
+      "_Development",
+      "_Packages",
+      "node_modules",
+      "bin",
+      "obj"
+    ],
+    "zipName": "Connect.DocBrowser"
+  },
+  "scripts": {
+    "build": "node_modules\\.bin\\webpack",
+    "watch": "node_modules\\.bin\\webpack --progress --colors --watch"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.3.4",
+    "@types/react": "^16.4.6",
+    "@types/react-dom": "^16.0.6",
+    "@types/react-router-dom": "^4.2.7",
+    "jquery": "^3.3.1",
+    "ts-loader": "3.5.0",
+    "typescript": "^2.9.2",
+    "webpack": "3.12.0"
+  },
+  "dependencies": {
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1"
+  }
 }
