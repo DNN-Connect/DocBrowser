@@ -16,5 +16,8 @@
      data-versions="@(Newtonsoft.Json.JsonConvert.SerializeObject(ItemRepository.Instance.GetVersionList(Dnn.ActiveModule.ModuleID)))">
 </div>
 
-<div class="testButton" data-moduleid="@Dnn.ActiveModule.ModuleID">
-</div>
+@if (DocBrowserModuleContext.Security.IsAdmin)
+{
+ <div class="testButton" data-moduleid="@Dnn.ActiveModule.ModuleID">
+ </div>
+}
