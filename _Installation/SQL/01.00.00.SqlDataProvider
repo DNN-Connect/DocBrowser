@@ -1,3 +1,109 @@
-/*
-SQL Install Scripts
-*/
+/******* TABLES *******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_DocBrowser_Items') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}{objectQualifier}Connect_DocBrowser_Items(
+ [ModuleId] [int] NOT NULL,
+ [Topic] [varchar](200) NOT NULL,
+ [Locale] [varchar](10) NOT NULL,
+ [Edition] [int] NOT NULL,
+ [Version] [varchar](12) NOT NULL,
+ [Title] [nvarchar](500) NOT NULL,
+ [ParentTopic] [varchar](200) NULL,
+ [PreviousTopic] [varchar](200) NULL,
+ [NextTopic] [varchar](200) NULL,
+ [Contents] [nvarchar](max) NULL,
+ CONSTRAINT PK_{objectQualifier}Connect_DocBrowser_Items PRIMARY KEY CLUSTERED 
+(
+ [ModuleId] ASC,
+ [Topic] ASC,
+ [Locale] ASC,
+ [Edition] ASC,
+ [Version] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+/******* STRUCTURE *******/
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_DocBrowser_Items_Modules') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_DocBrowser_Items'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_DocBrowser_Items  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_DocBrowser_Items_Modules FOREIGN KEY([ModuleId])
+REFERENCES {databaseOwner}{objectQualifier}Modules ([ModuleID])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_DocBrowser_Items_Modules') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_DocBrowser_Items'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_DocBrowser_Items CHECK CONSTRAINT FK_{objectQualifier}Connect_DocBrowser_Items_Modules
+GO
+
+/******* SPROCS *******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_DocBrowser_GetTopic') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}Connect_DocBrowser_GetTopic
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE {databaseOwner}{objectQualifier}Connect_DocBrowser_GetTopic
+ @ModuleId INT,
+ @Locale VARCHAR(10),
+ @Version VARCHAR(12),
+ @Edition INT,
+ @Topic VARCHAR(200)
+AS
+SELECT
+ i2.*
+FROM {databaseOwner}{objectQualifier}Connect_DocBrowser_Items i2
+INNER JOIN
+(SELECT
+ i.Topic,
+ MAX(i.Version) MaxVersion
+FROM {databaseOwner}{objectQualifier}Connect_DocBrowser_Items i
+GROUP BY i.ModuleId, i.Locale, i.Version, i.Edition, i.Topic
+HAVING
+ i.ModuleId=@ModuleId
+ AND i.Locale=@Locale
+ AND i.Version <= @Version
+ AND (i.Edition & @Edition > 0 OR i.Edition=0)) x ON i2.Topic=x.Topic AND i2.Version=x.MaxVersion
+WHERE
+ i2.ModuleId=@ModuleId
+ AND i2.Locale=@Locale
+ AND (i2.Edition & @Edition > 0 OR i2.Edition=0)
+ AND i2.Topic=@Topic
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_DocBrowser_GetTopicList') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}Connect_DocBrowser_GetTopicList
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE {databaseOwner}{objectQualifier}Connect_DocBrowser_GetTopicList
+ @ModuleId INT,
+ @Locale VARCHAR(10),
+ @Version VARCHAR(12),
+ @Edition INT
+AS
+SELECT
+ i2.Topic
+FROM {databaseOwner}{objectQualifier}Connect_DocBrowser_Items i2
+INNER JOIN
+(SELECT
+ i.Topic,
+ MAX(i.Version) MaxVersion
+FROM {databaseOwner}{objectQualifier}Connect_DocBrowser_Items i
+GROUP BY i.ModuleId, i.Locale, i.Version, i.Edition, i.Topic
+HAVING
+ i.ModuleId=@ModuleId
+ AND i.Locale=@Locale
+ AND i.Version <= @Version
+ AND (i.Edition & @Edition > 0 OR i.Edition=0)) x ON i2.Topic=x.Topic AND i2.Version=x.MaxVersion
+WHERE
+ i2.ModuleId=@ModuleId
+ AND i2.Locale=@Locale
+ AND (i2.Edition & @Edition > 0 OR i2.Edition=0)
+GO
+
