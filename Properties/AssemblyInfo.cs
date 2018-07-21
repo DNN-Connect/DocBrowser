@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DocBrowser Module")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("DNN DocBrowser module")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Connect")]
 [assembly: AssemblyProduct("DocBrowser")]
-[assembly: AssemblyCopyright("Copyright 2015 by Connect")]
+[assembly: AssemblyCopyright("Copyright 2018 by Connect")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
