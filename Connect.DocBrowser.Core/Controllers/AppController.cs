@@ -38,8 +38,8 @@ namespace Connect.DocBrowser.Core.Controllers
         private static void ParseDir(DirectoryInfo directory, string relativeDir, int moduleId)
         {
             var pipeline = new MarkdownPipelineBuilder().UseYamlFrontMatter().Build();
-            using (var cons = new StreamWriter("D:\\Webroot\\DNNAPI\\_dev\\out.txt", true, Encoding.UTF8))
-            {
+            //using (var cons = new StreamWriter("D:\\Webroot\\DNNAPI\\_dev\\out.txt", true, Encoding.UTF8))
+            //{
                 foreach (var f in directory.GetFiles("*.md"))
                 {
                     var content = "";
@@ -50,17 +50,17 @@ namespace Connect.DocBrowser.Core.Controllers
                     if (!string.IsNullOrEmpty(content))
                     {
                         var block = new FrontMatterBlock();
-                        cons.WriteLine(f.FullName);
+                        //cons.WriteLine(f.FullName);
                         var md = Markdown.Parse(content, pipeline);
                         //md.GetData("");
-                        cons.WriteLine(content);
+                        //cons.WriteLine(content);
                         foreach (var b in md)
                         {
                             if (b is YamlFrontMatterBlock)
                             {
                                 var fm = (YamlFrontMatterBlock)b;
                                 block = fm.Parse();
-                                cons.WriteLine(block);
+                                //cons.WriteLine(block);
                             }
                         }
                         if (block.Parsed)
@@ -74,7 +74,7 @@ namespace Connect.DocBrowser.Core.Controllers
                             {
                                 return "href=\"#\" data-topic=\"" + m.Groups[1] + "\"";
                             });
-                            cons.WriteLine(text);
+                            //cons.WriteLine(text);
                             var itm = new Item()
                             {
                                 Contents = text,
@@ -92,8 +92,8 @@ namespace Connect.DocBrowser.Core.Controllers
                         }
                     }
                 }
-                cons.Flush();
-            }
+                //cons.Flush();
+            //}
             foreach (var subDir in directory.GetDirectories())
             {
                 if (!subDir.Name.StartsWith("."))
