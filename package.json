@@ -23,6 +23,7 @@
     "pathToScripts": "./_Installation/SQL",
     "pathToSupplementaryFiles": "./_Installation",
     "pathToAssemblies": "./bin",
+    "manifest": "./_Installation/Connect.DocBrowser.dnn",
     "excludeFilter": [
       "_BuildSupport",
       "_Development",
