@@ -18,7 +18,10 @@ var json = Context.FileReadText(".\\package.json");
 var project = Newtonsoft.Json.JsonConvert.DeserializeObject<Project>(json);
 
 var slnFile ="./Connect.DocBrowser.sln";
-var buildSettings = new MSBuildSettings().SetConfiguration(configuration).UseToolVersion(MSBuildToolVersion.VS2015).WithProperty("OutputPath", project.dnn.pathToAssemblies);
+var buildSettings = new MSBuildSettings()
+.SetConfiguration(configuration)
+.UseToolVersion(MSBuildToolVersion.VS2015)
+.WithProperty("OutDir", project.dnn.pathToAssemblies);
 
 Func<IFileSystemInfo, bool> exclude_paths =
      fileSystemInfo => {
@@ -82,14 +85,44 @@ Task("AssemblyInfo")
  }
 });
 
-Task("Default")
+Task("Build")
 //.IsDependentOn("Restore")
 .IsDependentOn("Clean")
 .IsDependentOn("AssemblyInfo")
 .Does(() => {
+    MSBuild(slnFile, buildSettings);
+});
+
+Task("Manifest")
+.IsDependentOn("Build")
+.Does(() => {
+    var m = GetManifest(project);
+    m.Save(project.dnn.name + ".dnn");
+});
+
+Task("PackageInstall")
+.IsDependentOn("Manifest")
+.Does(() => {
+ var files = GetFilesByPatterns(Context, new string[] {
+     "App_LocalResources/*.resx"
+     , "**/*.ascx",
+            "Views/**/*.cshtml",
+            "fonts/*.*",
+            "**/*.html",
+            "**/*.png",
+            "**/*.gif",
+            "**/*.txt",
+            "*.dnn"
+     }, exclude_paths);
+ var packageName = project.dnn.zipName + "_" + project.version + ".zip";
+ Zip(".", project.dnn.packagesPath + "/" + packageName, files);
+});
+
+Task("Default")
+.IsDependentOn("PackageInstall")
+.Does(() => {
     Information(project.name);
-    MSBuild(slnFile, buildSettings);    
-   Information(GetManifest(project));
 });
 
 RunTarget(target);
+

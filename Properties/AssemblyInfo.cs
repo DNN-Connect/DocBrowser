@@ -1,10 +1,10 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DocBrowser Module")]
+[assembly: AssemblyTitle("docbrowser")]
 [assembly: AssemblyDescription("DNN DocBrowser module")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Connect")]
