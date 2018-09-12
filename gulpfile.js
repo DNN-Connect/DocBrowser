@@ -13,6 +13,7 @@ var gulp = require("gulp"),
   rename = require("gulp-rename"),
   manifest = require("gulp-dnn-manifest"),
   path = require("path"),
+  concat = require("gulp-concat"),
   less = require("gulp-less"),
   lessPluginCleanCSS = require("less-plugin-clean-css"),
   cleancss = new lessPluginCleanCSS({
