@@ -9,7 +9,6 @@ interface IMenuProps {
   version: string;
   locale: string;
   edition: string;
-  topmenu?: string;
 }
 
 interface IMenuState {}
@@ -23,20 +22,21 @@ export default class Menu extends React.Component<IMenuProps, IMenuState> {
   }
 
   public render(): JSX.Element {
+    var i = 0;
     var subMenu =
       this.props.menuItem.menu && this.props.menuItem.menu.length > 0 ? (
-        <ul>
+        <ul className="docsmenu">
           {this.props.menuItem.menu.map(m => {
+            i++;
             return (
               <Menu
                 module={this.props.module}
                 topics={this.props.topics}
                 menuItem={m}
-                key={m.key}
+                key={i}
                 version={this.props.version}
                 locale={this.props.locale}
                 edition={this.props.edition}
-                topmenu={this.props.topmenu}
               />
             );
           })}
@@ -52,8 +52,6 @@ export default class Menu extends React.Component<IMenuProps, IMenuState> {
             this.props.version +
             "/" +
             this.props.edition +
-            "/" +
-            this.props.topmenu +
             "/" +
             this.props.menuItem.key
           }

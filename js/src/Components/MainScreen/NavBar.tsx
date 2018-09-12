@@ -8,7 +8,6 @@ interface INavBarProps {
   version: string;
   locale: string;
   edition: string;
-  topmenu?: string;
   topic?: string;
   menu: Models.IMenu[];
 }
@@ -38,8 +37,6 @@ export default class NavBar extends React.Component<
               v +
               "/" +
               this.props.edition.toString() +
-              "/" +
-              this.props.topmenu +
               "/"
             }
           >
@@ -56,29 +53,6 @@ export default class NavBar extends React.Component<
       case 4:
         currentEdition = "Evoq Engage";
     }
-    var mainSubject = "";
-    var mainSubjects = this.props.menu.map(m => {
-      if (m.key === this.props.topmenu) mainSubject = m.title;
-      return (
-        <li key={m.key}>
-          <Link
-            to={
-              "/" +
-              this.props.locale +
-              "/" +
-              this.props.version +
-              "/" +
-              this.props.edition.toString() +
-              "/" +
-              m.key +
-              "/"
-            }
-          >
-            {m.title}
-          </Link>
-        </li>
-      );
-    });
     return (
       <nav className="navbar navbar-default">
         <div className="collapse navbar-collapse">
@@ -115,9 +89,7 @@ export default class NavBar extends React.Component<
                       this.props.locale +
                       "/" +
                       this.props.version +
-                      "/1/" +
-                      this.props.topmenu +
-                      "/"
+                      "/1/"
                     }
                   >
                     DNN Platform
@@ -130,9 +102,7 @@ export default class NavBar extends React.Component<
                       this.props.locale +
                       "/" +
                       this.props.version +
-                      "/2/" +
-                      this.props.topmenu +
-                      "/"
+                      "/2/"
                     }
                   >
                     Evoq Content
@@ -145,28 +115,13 @@ export default class NavBar extends React.Component<
                       this.props.locale +
                       "/" +
                       this.props.version +
-                      "/4/" +
-                      this.props.topmenu +
-                      "/"
+                      "/4/"
                     }
                   >
                     Evoq Engage
                   </Link>
                 </li>
               </ul>
-            </li>
-            <li className="dropdown">
-              <a
-                href="#"
-                className="dropdown-toggle"
-                data-toggle="dropdown"
-                role="button"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {mainSubject} <span className="caret" />
-              </a>
-              <ul className="dropdown-menu">{mainSubjects}</ul>
             </li>
           </ul>
         </div>

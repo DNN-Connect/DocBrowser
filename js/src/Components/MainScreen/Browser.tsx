@@ -10,7 +10,6 @@ interface IBrowserProps {
   version: string;
   locale: string;
   edition: string;
-  topmenu?: string;
   topic?: string;
 }
 
@@ -89,13 +88,11 @@ export default class Browser extends React.Component<
               version={this.props.version}
               locale={this.props.locale}
               edition={this.props.edition}
-              topmenu={this.props.topmenu}
             />
           </div>
           <div className="col-sm-12 col-md-9">
             <Contents
               module={this.props.module}
-              topmenu={this.props.topmenu}
               topic={this.props.topic}
               version={this.props.version}
               locale={this.props.locale}

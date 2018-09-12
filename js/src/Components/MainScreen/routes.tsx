@@ -29,7 +29,7 @@ export default class Routes extends React.Component<IRoutesProps> {
             )}
           />
           <Route
-            path="/:locale/:version/:edition/:topmenu?/:topic?"
+            path="/:locale/:version/:edition/:topic?"
             render={(props: RouteComponentProps<DetailRouteMatchParams>) => {
               return <Browser {...this.props} {...props.match.params} />;
             }}
@@ -44,6 +44,5 @@ interface DetailRouteMatchParams {
   version: string;
   locale: string;
   edition: string;
-  topmenu: string;
   topic: string;
 }

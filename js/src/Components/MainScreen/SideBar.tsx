@@ -10,7 +10,6 @@ interface ISideBarProps {
   version: string;
   locale: string;
   edition: string;
-  topmenu?: string;
 }
 
 interface ISideBarState {}
@@ -26,26 +25,27 @@ export default class SideBar extends React.Component<
     this.state = {};
   }
 
+  componentDidUpdate(prevProps: ISideBarProps, prevState: ISideBarState) {
+    $('ul.docsmenu li').hide();
+    $('ul.docsmenu li:has(a)').show();
+  }
+
   public render(): JSX.Element {
-    var menu = this.props.menu.find(m => {
-      return m.key === this.props.topmenu;
+    var i = 0;
+    var subMenu = this.props.menu.map(m => {
+      i++;
+      return (
+        <Menu
+          module={this.props.module}
+          topics={this.props.topics}
+          menuItem={m}
+          key={i}
+          version={this.props.version}
+          locale={this.props.locale}
+          edition={this.props.edition}
+        />
+      );
     });
-    var subMenu = menu
-      ? menu.menu.map(m => {
-          return (
-            <Menu
-              module={this.props.module}
-              topics={this.props.topics}
-              menuItem={m}
-              key={m.key}
-              version={this.props.version}
-              locale={this.props.locale}
-              edition={this.props.edition}
-              topmenu={this.props.topmenu}
-            />
-          );
-        })
-      : null;
     return (
       <nav>
         <div>Sidebar</div>

@@ -6,7 +6,6 @@ interface IContentsProps {
   version: string;
   locale: string;
   edition: string;
-  topmenu?: string;
   topic?: string;
 }
 
@@ -67,8 +66,6 @@ export default class Contents extends React.Component<
                       this.props.version +
                       "/" +
                       this.props.edition +
-                      "/" +
-                      this.props.topmenu +
                       "/" +
                       topic
                   )
