@@ -16,6 +16,7 @@ interface IBrowserProps {
 interface IBrowserState {
   menu: Models.IMenu[];
   topics: string[];
+  sidebarActive: string;
 }
 
 export default class Browser extends React.Component<
@@ -28,7 +29,8 @@ export default class Browser extends React.Component<
     super(props);
     this.state = {
       menu: [],
-      topics: []
+      topics: [],
+      sidebarActive: ''
     };
   }
 
@@ -56,6 +58,14 @@ export default class Browser extends React.Component<
     );
   }
 
+  toggleSideBar = e => {
+    if(this.state.sidebarActive === 'active') {
+      this.setState({sidebarActive: ''});
+    } else {
+      this.setState({sidebarActive: 'active'});
+    }
+  }
+  
   componentDidMount() {
     this.getMenu();
     this.getTopics();
@@ -76,29 +86,36 @@ export default class Browser extends React.Component<
 
   public render(): JSX.Element {
     return (
-      <div>
-        <NavBar {...this.props} menu={this.state.menu} />
-        <div className="row">
-          <div className="col-sm-12 col-md-3">
-            <SideBar
-              module={this.props.module}
-              versions={this.props.versions}
-              topics={this.state.topics}
-              menu={this.state.menu}
-              version={this.props.version}
-              locale={this.props.locale}
-              edition={this.props.edition}
-            />
-          </div>
-          <div className="col-sm-12 col-md-9">
-            <Contents
-              module={this.props.module}
-              topic={this.props.topic}
-              version={this.props.version}
-              locale={this.props.locale}
-              edition={this.props.edition}
-            />
-          </div>
+      <div className="wrapper">
+        <nav id="sidebar" className={this.state.sidebarActive}>
+          <SideBar
+            module={this.props.module}
+            versions={this.props.versions}
+            topics={this.state.topics}
+            menu={this.state.menu}
+            version={this.props.version}
+            locale={this.props.locale}
+            edition={this.props.edition}
+          />
+        </nav>
+        <div id="content" className={this.state.sidebarActive}>
+          <nav className="navbar navbar-expand-lg navbar-light bg-light">
+              <div className="container-fluid">
+
+                  <button type="button" id="sidebarCollapse" className="btn btn-info" onClick={this.toggleSideBar}>
+                      <i className="fas fa-align-left"></i>
+                      <span>Toggle Sidebar</span>
+                  </button>
+
+              </div>
+          </nav>
+          <Contents
+            module={this.props.module}
+            topic={this.props.topic}
+            version={this.props.version}
+            locale={this.props.locale}
+            edition={this.props.edition}
+          />
         </div>
       </div>
     );
