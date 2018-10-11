@@ -62,10 +62,10 @@ export default class Menu extends React.Component<IMenuProps, IMenuState> {
             this.props.edition +
             "/" +
             this.props.menuItem.key
-          } 
+          }
+          className={this.state.collapsed ? "" : "active"} 
         >
           {this.props.menuItem.title}
-          <span className="fa fa-book pull-right"></span>
         </Link>
       ) : (
         <span>{this.props.menuItem.title}</span>

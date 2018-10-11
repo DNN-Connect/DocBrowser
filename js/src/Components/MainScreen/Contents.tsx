@@ -80,7 +80,25 @@ export default class Contents extends React.Component<
 
   public render(): JSX.Element {
     return this.state.topic ? (
-      <div dangerouslySetInnerHTML={{ __html: this.state.topic.Contents }} />
+      <div>
+        <div dangerouslySetInnerHTML={{ __html: this.state.topic.Contents }} />
+        <div className="card text-center">
+          <div className="card-footer text-muted">
+            <button type="button" id="sidebarCollapse" className="btn btn-secondary pull-left mr-2">
+                <i className="fa fa-comment pull-right"></i>&nbsp;
+                <span>Feedback</span>
+            </button>
+            <button type="button" id="sidebarCollapse" className="btn btn-secondary pull-left">
+                <i className="fa fa-link pull-right"></i>&nbsp;
+                <span>Link</span>
+            </button>
+            <button type="button" id="sidebarCollapse" className="btn btn-primary pull-right">
+                <i className="fa fa-github pull-right"></i>&nbsp;
+                <span>Edit on GitHub</span>
+            </button>
+          </div>
+        </div>
+      </div>
     ) : (
       <div />
     );

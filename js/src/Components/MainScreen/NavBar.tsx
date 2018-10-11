@@ -76,27 +76,15 @@ export default class NavBar extends React.Component<
       <div>
         <a 
           color="secondary" 
-          onClick={this.toggleVersions} 
-          style={{ marginBottom: '1rem' }}
-          aria-haspopup="true"
-          aria-expanded="false"
-          className="btn btn-block"
-        >
-          {this.props.version} <span className="fa fa-bars pull-right" />
-        </a>
-        <ul className={this.state.collapseVersions ? "" : "collapse"} >{versions}</ul>
-
-        <a 
-          color="secondary" 
           onClick={this.toggleEditions} 
           style={{ marginBottom: '1rem' }}
           aria-haspopup="true"
           aria-expanded="false"
-          className="btn btn-block"
+          className={this.state.collapseEditions ? "btn btn-secondary btn-block expanded" : "btn btn-secondary btn-block active"}
         >
-          {currentEdition} <span className="fa fa-bars pull-right" />
+          {currentEdition} <span className={this.state.collapseEditions ? "fa fa-caret-up pull-right" : "fa fa-filter pull-right"} />
         </a>
-        <ul className={this.state.collapseEditions ? "" : "collapse"} >
+        <ul className={this.state.collapseEditions ? "expanded" : "collapse"} >
           <li>
             <Link
               to={
@@ -140,6 +128,19 @@ export default class NavBar extends React.Component<
             </Link>
           </li>
         </ul>
+
+        <a 
+          color="secondary" 
+          onClick={this.toggleVersions} 
+          style={{ marginBottom: '1rem' }}
+          aria-haspopup="true"
+          aria-expanded="false"
+          className={this.state.collapseVersions ? "btn btn-secondary btn-block expanded" : "btn btn-secondary btn-block active"}
+        >
+          {this.props.version} <span className={this.state.collapseVersions ? "fa fa-caret-up pull-right" : "fa fa-filter pull-right"} />
+        </a>
+        <ul className={this.state.collapseVersions ? "expanded" : "collapse"} >{versions}</ul>
+
       </div>
     );
   }
