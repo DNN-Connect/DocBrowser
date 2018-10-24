@@ -54,12 +54,24 @@ export default class SideBar extends React.Component<
     return (
       <div>
         <div className="sidebar-header">
-          <h3>DNN Docs</h3>
+          <img src="/DesktopModules/MVC/Connect/DocBrowser/img/dnn_docs_logo.svg" alt="DNN Docs Logo" />
         </div>
         <NavBar {...this.props} menu={this.state.menu} />
         <ul className="list-unstyled components">
           {subMenu}
         </ul>
+        <div className="mb-2">
+          <button type="button" className="btn btn-secondary btn-block" >
+            <i className="fa fa-info-circle pull-right"></i>
+            <span>About DNN Docs</span>
+          </button>
+        </div>
+        <div>
+          <button type="button" className="btn btn-secondary btn-block" >
+            <i className="fa fa-comment pull-right"></i>
+            <span>Give Feedback</span>
+          </button>
+        </div>
       </div>
     );
   }

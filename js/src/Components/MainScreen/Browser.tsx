@@ -99,15 +99,14 @@ export default class Browser extends React.Component<
           />
         </nav>
         <div id="content" className={this.state.sidebarActive}>
-          <nav className="navbar navbar-expand-lg navbar-light bg-light">
-              <div className="container-fluid">
-
-                  <button type="button" id="sidebarCollapse" className="btn btn-info" onClick={this.toggleSideBar}>
-                      <i className="fas fa-align-left"></i>
-                      <span>Toggle Sidebar</span>
-                  </button>
-
-              </div>
+          <nav aria-label="breadcrumb">
+            <button type="button" id="sidebarCollapse" className="btn btn-secondary float-left" onClick={this.toggleSideBar} style={{ height: '47px' }}>
+                <i className={this.state.sidebarActive ? "fa fa-menu fa-align-left" : "fa fa-close"} style={{ fontSize: '1.5rem' }}></i>&nbsp;
+            </button>
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item"><a href="#">Home</a></li>
+              <li className="breadcrumb-item active" aria-current="page">Current Page</li>
+            </ol>
           </nav>
           <Contents
             module={this.props.module}

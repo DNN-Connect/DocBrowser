@@ -81,6 +81,7 @@ i, span {
     max-width: 125px !important;
     text-align: center !important;
     left: 0 !important;
+    display: none !important;
 }
 
 #sidebar.active .sidebar-header h3, #sidebar.active .CTAs {
@@ -145,12 +146,12 @@ i, span {
     border-bottom: 10px solid #29BDF2 !important;
 }
 
-#sidebar ul li a {
+#sidebar ul > li a {
     padding: 10px !important;
     font-size: 1.1em !important;
     display: block !important;
 }
-#sidebar ul li a:hover {
+#sidebar ul li a:hover, #sidebar ul > li a.active {
     color: #30C0F5 !important;
     background: #fff !important;
 }
@@ -163,13 +164,26 @@ i, span {
     background: #29BDF2 !important;
 }
 
+#sidebar ul li ul li, #sidebar ul.expanded {
+    background: #53ccf9 !important;
+}
+
+#sidebar ul li ul a, #sidebar ul li ul span {
+    font-size: 0.9em !important;
+    padding: 10px 10px 10px 30px !important;
+    display: block !important;
+}
+
+#sidebar a.expanded {
+    margin-bottom: 0 !important;
+}
 
 a[data-toggle="collapse"] {
     position: relative !important;
 }
 
 a[aria-expanded="false"]::before, a[aria-expanded="true"]::before {
-    content: '\e259' !important;
+    /*content: '\e259' !important;*/
     display: block !important;
     position: absolute !important;
     right: 20px !important;
@@ -177,14 +191,7 @@ a[aria-expanded="false"]::before, a[aria-expanded="true"]::before {
     font-size: 0.6em !important;
 }
 a[aria-expanded="true"]::before {
-    content: '\e260' !important;
-}
-
-
-ul ul a {
-    font-size: 0.9em !important;
-    padding-left: 30px !important;
-    background: #29BDF2 !important;
+    /*content: '\e260' !important;*/
 }
 
 ul.CTAs {
@@ -247,7 +254,7 @@ a.article, a.article:hover {
 }
  
 ::-webkit-scrollbar-thumb {
-    background: #30C0F5; 
+    background: rgb(121, 121, 121); 
 }
 
 ::-webkit-scrollbar-thumb:hover {
