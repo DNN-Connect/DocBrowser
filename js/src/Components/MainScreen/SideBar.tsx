@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as Models from "../../Models/";
+import NavBar from "./NavBar";
 import Menu from "./Menu";
 
 interface ISideBarProps {
@@ -12,7 +13,9 @@ interface ISideBarProps {
   edition: string;
 }
 
-interface ISideBarState {}
+interface ISideBarState {
+  menu: Models.IMenu[];
+}
 
 export default class SideBar extends React.Component<
   ISideBarProps,
@@ -22,7 +25,9 @@ export default class SideBar extends React.Component<
 
   constructor(props: ISideBarProps) {
     super(props);
-    this.state = {};
+    this.state = {
+      menu: []
+    };
   }
 
   componentDidUpdate(prevProps: ISideBarProps, prevState: ISideBarState) {
@@ -47,10 +52,15 @@ export default class SideBar extends React.Component<
       );
     });
     return (
-      <nav>
-        <div>Sidebar</div>
-        <ul>{subMenu}</ul>
-      </nav>
+      <div>
+        <div className="sidebar-header">
+          <h3>DNN Docs</h3>
+        </div>
+        <NavBar {...this.props} menu={this.state.menu} />
+        <ul className="list-unstyled components">
+          {subMenu}
+        </ul>
+      </div>
     );
   }
 }

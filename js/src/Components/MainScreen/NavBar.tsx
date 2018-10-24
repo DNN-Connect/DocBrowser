@@ -12,7 +12,10 @@ interface INavBarProps {
   menu: Models.IMenu[];
 }
 
-interface INavBarState {}
+interface INavBarState {
+  collapseVersions: boolean;
+  collapseEditions: boolean;
+}
 
 export default class NavBar extends React.Component<
   INavBarProps,
@@ -22,7 +25,22 @@ export default class NavBar extends React.Component<
 
   constructor(props: INavBarProps) {
     super(props);
-    this.state = {};
+    this.state = {
+      collapseVersions: false,
+      collapseEditions: false
+    };
+  }
+
+  toggleVersions = e => {
+    this.setState({
+      collapseVersions: !this.state.collapseVersions
+    });
+  }
+
+  toggleEditions = e => {
+    this.setState({
+      collapseEditions: !this.state.collapseEditions
+    });
   }
 
   public render(): JSX.Element {
@@ -39,6 +57,7 @@ export default class NavBar extends React.Component<
               this.props.edition.toString() +
               "/"
             }
+            onClick={this.toggleVersions}
           >
             {v}
           </Link>
@@ -54,78 +73,74 @@ export default class NavBar extends React.Component<
         currentEdition = "Evoq Engage";
     }
     return (
-      <nav className="navbar navbar-default">
-        <div className="collapse navbar-collapse">
-          <ul className="nav navbar-nav">
-            <li className="dropdown">
-              <a
-                href="#"
-                className="dropdown-toggle"
-                data-toggle="dropdown"
-                role="button"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {this.props.version} <span className="caret" />
-              </a>
-              <ul className="dropdown-menu">{versions}</ul>
-            </li>
-            <li className="dropdown">
-              <a
-                href="#"
-                className="dropdown-toggle"
-                data-toggle="dropdown"
-                role="button"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {currentEdition} <span className="caret" />
-              </a>
-              <ul className="dropdown-menu">
-                <li>
-                  <Link
-                    to={
-                      "/" +
-                      this.props.locale +
-                      "/" +
-                      this.props.version +
-                      "/1/"
-                    }
-                  >
-                    DNN Platform
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={
-                      "/" +
-                      this.props.locale +
-                      "/" +
-                      this.props.version +
-                      "/2/"
-                    }
-                  >
-                    Evoq Content
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={
-                      "/" +
-                      this.props.locale +
-                      "/" +
-                      this.props.version +
-                      "/4/"
-                    }
-                  >
-                    Evoq Engage
-                  </Link>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <div>
+        <a 
+          color="secondary" 
+          onClick={this.toggleVersions} 
+          style={{ marginBottom: '1rem' }}
+          aria-haspopup="true"
+          aria-expanded="false"
+          className="btn btn-block"
+        >
+          {this.props.version} <span className="fa fa-bars pull-right" />
+        </a>
+        <ul className={this.state.collapseVersions ? "" : "collapse"} >{versions}</ul>
+
+        <a 
+          color="secondary" 
+          onClick={this.toggleEditions} 
+          style={{ marginBottom: '1rem' }}
+          aria-haspopup="true"
+          aria-expanded="false"
+          className="btn btn-block"
+        >
+          {currentEdition} <span className="fa fa-bars pull-right" />
+        </a>
+        <ul className={this.state.collapseEditions ? "" : "collapse"} >
+          <li>
+            <Link
+              to={
+                "/" +
+                this.props.locale +
+                "/" +
+                this.props.version +
+                "/1/"
+              }
+              onClick={this.toggleEditions} 
+            >
+              DNN Platform
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={
+                "/" +
+                this.props.locale +
+                "/" +
+                this.props.version +
+                "/2/"
+              }
+              onClick={this.toggleEditions} 
+            >
+              Evoq Content
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={
+                "/" +
+                this.props.locale +
+                "/" +
+                this.props.version +
+                "/4/"
+              }
+              onClick={this.toggleEditions} 
+            >
+              Evoq Engage
+            </Link>
+          </li>
+        </ul>
+      </div>
     );
   }
 }
