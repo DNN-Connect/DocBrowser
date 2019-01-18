@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Template>D:\Documents\My Templates\RazorTemplates\Views\DnnMvcTemplates\Main.cshtml</Template>
+  <OrgName>Connect</OrgName>
+  <ModuleName>DocBrowser</ModuleName>
+  <RootNameSpace>Connect.DNN.Modules.DocBrowser</RootNameSpace>
+  <CoreRootNameSpace>Connect.DocBrowser.Core</CoreRootNameSpace>
+  <ConnectionString>Data Source=(local);Initial Catalog=dnnapi;User ID=test;Password=test</ConnectionString>
+  <ObjectQualifier />
+  <DatabaseOwner>dbo</DatabaseOwner>
+  <ModuleObjectQualifier>Connect_DocBrowser</ModuleObjectQualifier>
+  <ModuleFolder>Connect/DocBrowser</ModuleFolder>
+  <OutputDirectory>D:\Modules\DocBrowser\_Development\Out</OutputDirectory>
+  <TablePattern />
+  <ViewPattern />
+  <ViewReplacementPattern />
+  <DatabaseTableViewMapping />
+  <UseSeparateCoreProject>true</UseSeparateCoreProject>
+</Settings>

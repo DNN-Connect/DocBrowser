@@ -1,0 +1,11 @@
+Loaded D:\Webroot\DNNAPI\web.config
+ConnectionString: Data Source=(local);Initial Catalog=dnnapi;User ID=test;Password=test
+ObjectQualifier : 
+DatabaseOwner   : dbo
+FullPattern     : (?<owner>\[?dbo\]?\.)?\[?(?<prefix>\w*)(?<modqualifier>Connect_DocBrowser_)(?<name>\w+)\]?|(?<owner>\[?dbo\]?\.)\[?(?<name>\w+)\]?|(?<=\sJOIN\s+)(?<name>\w+)
+
+
+
+
+
+

@@ -1,10 +1,11 @@
-#load "_BuildSupport/Utilities.cake"
-#load "_BuildSupport/Types.cake"
 #addin nuget:?package=Newtonsoft.Json&version=9.0.1
 #addin "Cake.FileHelpers"
-#reference "D:\Documents\Visual Studio\Projects\Bring2mind.Build\bin\Debug\netstandard2.0\Bring2mind.Build.dll"
+#addin "Cake.Npm"
+#reference "BuildSupport/netstandard2.0/Connect.CakeUtils.dll"
 
-using Bring2mind.Build;
+using Connect.CakeUtils;
+using Connect.CakeUtils.Compression;
+using Connect.CakeUtils.Manifest;
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -12,116 +13,116 @@ using Bring2mind.Build;
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-
-
-var json = Context.FileReadText(".\\package.json");
-var project = Newtonsoft.Json.JsonConvert.DeserializeObject<Project>(json);
-
+var packageJson = Context.FileReadText(".\\package.json");
+var project = Newtonsoft.Json.JsonConvert.DeserializeObject<Project>(packageJson);
 var slnFile ="./Connect.DocBrowser.sln";
 var buildSettings = new MSBuildSettings()
 .SetConfiguration(configuration)
 .UseToolVersion(MSBuildToolVersion.VS2015)
-.WithProperty("OutDir", project.dnn.pathToAssemblies);
-
-Func<IFileSystemInfo, bool> exclude_paths =
-     fileSystemInfo => {
-         //Information(fileSystemInfo.Path);
-         var crt = new System.IO.DirectoryInfo(".");
-         var rel = fileSystemInfo.Path.FullPath.Substring(crt.FullName.Length + 1);
-         if (rel.IndexOf('/') > -1) {
-            rel = rel.Substring(0, rel.IndexOf('/'));
-         }
-         return !project.dnn.excludeFilter.Contains(rel);
-     };
-
-
-///////////////////////////////////////////////////////////////////////////////
-// SETUP / TEARDOWN
-///////////////////////////////////////////////////////////////////////////////
-
-Setup(ctx =>
-{
-   // Executed BEFORE the first task.
-   Information("Running tasks...");
-});
-
-Teardown(ctx =>
-{
-   // Executed AFTER the last task.
-   Information("Finished running tasks.");
-});
+.WithProperty("OutDir", new System.IO.DirectoryInfo(project.dnn.pathsAndFiles.pathToAssemblies).FullName);
+var devDnnPath = "D:\\Webroot\\DNNAPI\\";
 
 ///////////////////////////////////////////////////////////////////////////////
 // TASKS
 ///////////////////////////////////////////////////////////////////////////////
 
-Task("Restore")
+Task("CleanDev")
 .Does(() => {
-    NuGetRestore(slnFile);
+    switch (project.dnn.projectType) {
+        case "":
+            var moduleFolder = devDnnPath + "DesktopModules\\" + project.dnn.folder.Replace("/", "\\");
+            try
+            {
+                System.IO.Directory.Delete(moduleFolder, true);
+            }
+            catch (System.Exception)
+            {
+            }
+            System.IO.Directory.CreateDirectory(moduleFolder);
+            break;
+    }
 });
 
-
-
-Task("Clean")
-    .Does(() =>
-{
-    CleanDirectory(project.dnn.pathToAssemblies);
+Task("CopyDev")
+.IsDependentOn("CleanDev")
+.Does(() => {
+    switch (project.dnn.projectType) {
+        case "":
+            var moduleFolder = devDnnPath + "DesktopModules\\" + project.dnn.folder.Replace("/", "\\");
+            foreach (var file in Utilities.GetFilesByPatterns(Context, project.dnn.pathsAndFiles.devFolder, project.dnn.pathsAndFiles.releaseFiles, Utilities.ExcludeFunction(project))) {
+                Console.WriteLine("Copying {1}", DateTime.Now, file.FullPath);
+                var dest = new System.IO.FileInfo(moduleFolder + "\\" + file.FullPath.Substring(new System.IO.DirectoryInfo(project.dnn.pathsAndFiles.devFolder).FullName.Length));
+                dest.Directory.Create();
+                System.IO.File.Copy(file.FullPath, dest.FullName, true);
+            }
+            break;
+    }
 });
 
 Task("AssemblyInfo")
 .Does(() => {
-     var files = GetFiles("./**/AssemblyInfo.cs", exclude_paths);
- foreach(var file in files)
- {
-     Information("File: {0}", file);
-     var ai = new Bring2mind.Build.AssemblyInfo(file.FullPath);
-     ai.SetProperty("AssemblyVersion", project.version);
-     ai.SetProperty("AssemblyFileVersion", project.version);
-     ai.SetProperty("AssemblyTitle", project.name);
-     ai.SetProperty("AssemblyDescription", project.description);
-     ai.SetProperty("AssemblyCompany", project.dnn.owner.organization);
-     ai.SetProperty("AssemblyCopyright", string.Format("Copyright {0} by {1}", System.DateTime.Now.Year, project.dnn.owner.organization));
-     ai.Write();
- }
+    var settings = new GlobberSettings();
+    settings.Predicate = Utilities.ExcludeFunction(project);
+    var files = GetFiles("./**/AssemblyInfo.cs", settings);
+    foreach(var file in files)
+    {
+        Information("Updating Assembly: {0}", file);
+        Utilities.UpdateAssemblyInfo(project, file.FullPath);
+    }
 });
 
 Task("Build")
-//.IsDependentOn("Restore")
-.IsDependentOn("Clean")
 .IsDependentOn("AssemblyInfo")
 .Does(() => {
+    CleanDirectory(project.dnn.pathsAndFiles.pathToAssemblies);
+    NuGetRestore(slnFile);
     MSBuild(slnFile, buildSettings);
-});
-
-Task("Manifest")
-.IsDependentOn("Build")
-.Does(() => {
-    var m = GetManifest(project);
-    m.Save(project.dnn.name + ".dnn");
+    NpmRunScript("build");
 });
 
 Task("PackageInstall")
-.IsDependentOn("Manifest")
+.IsDependentOn("Build")
 .Does(() => {
- var files = GetFilesByPatterns(Context, new string[] {
-     "App_LocalResources/*.resx"
-     , "**/*.ascx",
-            "Views/**/*.cshtml",
-            "fonts/*.*",
-            "**/*.html",
-            "**/*.png",
-            "**/*.gif",
-            "**/*.txt",
-            "*.dnn"
-     }, exclude_paths);
- var packageName = project.dnn.zipName + "_" + project.version + ".zip";
- Zip(".", project.dnn.packagesPath + "/" + packageName, files);
+    var files = Utilities.GetFilesByPatterns(Context, project.dnn.pathsAndFiles.devFolder, project.dnn.pathsAndFiles.releaseFiles, Utilities.ExcludeFunction(project));
+    var resZip = ZipToBytes(project.dnn.pathsAndFiles.devFolder, files);
+    Information("Zipped resources file");
+    var packageName = project.dnn.pathsAndFiles.zipName + "_" + project.version + "_Install.zip";
+    var packagePath = project.dnn.pathsAndFiles.packagesPath + "/" + packageName;
+    AddBinaryFileToZip(packagePath, resZip, "resources.zip", false);
+    files = Utilities.GetFilesByPatterns(Context, new string[] {
+        project.dnn.pathsAndFiles.pathToAssemblies + "/*.dll"
+        });
+    AddFilesToZip(packagePath, project.dnn.pathsAndFiles.pathToAssemblies, project.dnn.pathsAndFiles.packageAssembliesFolder, files, true);
+    files = Utilities.GetFilesByPatterns(Context, new string[] {
+        project.dnn.pathsAndFiles.pathToScripts + "/*.SqlDataProvider"
+        });
+    AddFilesToZip(packagePath, project.dnn.pathsAndFiles.pathToScripts, project.dnn.pathsAndFiles.packageScriptsFolder, files, true);
+    files = Utilities.GetFilesByPatterns(Context, new string[] {
+        project.dnn.pathsAndFiles.pathToSupplementaryFiles + "/License.txt"
+        });
+    AddFilesToZip(packagePath, project.dnn.pathsAndFiles.pathToSupplementaryFiles, files, true);
+    var releaseNotes = Connect.CakeUtils.Markdown.ToHtml(project.dnn.pathsAndFiles.pathToSupplementaryFiles + "/ReleaseNotes.md");
+    if (releaseNotes != "") {
+        AddTextFileToZip(packagePath, releaseNotes, "ReleaseNotes.txt", true);
+    } else {
+        files = Utilities.GetFilesByPatterns(Context, new string[] {
+            project.dnn.pathsAndFiles.pathToSupplementaryFiles + "/ReleaseNotes.txt"
+        });
+        AddFilesToZip(packagePath, project.dnn.pathsAndFiles.pathToSupplementaryFiles, files, true);
+    }
+    var m = new Manifest(project);
+    AddXmlFileToZip(packagePath, m, project.dnn.name + ".dnn", true);
+});
+
+Task("Watch")
+.IsDependentOn("CopyDev")
+.Does(()=>{
+    var w = new Watcher(Context, project, new System.IO.DirectoryInfo(project.dnn.pathsAndFiles.devFolder).FullName, devDnnPath);
 });
 
 Task("Default")
-.IsDependentOn("PackageInstall")
+.IsDependentOn("Watch")
 .Does(() => {
-    Information(project.name);
 });
 
 RunTarget(target);

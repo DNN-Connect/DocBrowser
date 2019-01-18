@@ -13,8 +13,8 @@
         "allowJs": true
     },
     "include": [
-        "js/src/**/*.ts",
-        "js/src/**/*.tsx"
+        "js/**/*.ts",
+        "js/**/*.tsx"
     ],
     "exclude": [
         "node_modules"

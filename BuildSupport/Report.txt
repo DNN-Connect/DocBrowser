@@ -1,0 +1,179 @@
+NAnt 0.91 (Build 0.91.4312.0; release; 22-Oct-11)
+Copyright (C) 2001-2011 Gerry Shaw
+http://nant.sourceforge.net
+
+Buildfile: file:///D:/Webroot/DNNAPI/DesktopModules/MVC/Connect/DocBrowser/_BuildSupport/CreateScript.build
+Target framework: Microsoft .NET Framework 4.0
+Target(s) specified: create.script 
+
+
+create.script:
+
+Loaded D:\Webroot\DNNAPI\web.config
+ConnectionString: Data Source=(local);Initial Catalog=dnnapi;User ID=test;Password=test
+ObjectQualifier : 
+DatabaseOwner   : dbo
+FullPattern     : (?<owner>\[?dbo\]?\.)?\[?(?<prefix>\w*)(?<modqualifier>Connect_DocBrowser_)(?<name>\w+)\]?|(?<owner>\[?dbo\]?\.)\[?(?<name>\w+)\]?|(?<=\sJOIN\s+)(?<name>\w+)
+
+Create Install Script
+TABLES
+Adding Connect_DocBrowser_Items
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Connect_DocBrowser_Items]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Connect_DocBrowser_Items](
+	[ModuleId] [int] NOT NULL,
+	[Topic] [varchar](200) NOT NULL,
+	[Locale] [varchar](10) NOT NULL,
+	[Edition] [int] NOT NULL,
+	[Version] [varchar](12) NOT NULL,
+	[Title] [nvarchar](500) NOT NULL,
+	[ParentTopic] [varchar](200) NULL,
+	[PreviousTopic] [varchar](200) NULL,
+	[NextTopic] [varchar](200) NULL,
+	[Contents] [nvarchar](max) NULL,
+ CONSTRAINT [PK_Connect_DocBrowser_Items_1] PRIMARY KEY CLUSTERED 
+(
+	[ModuleId] ASC,
+	[Topic] ASC,
+	[Locale] ASC,
+	[Edition] ASC,
+	[Version] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+
+STRUCTURE
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Connect_DocBrowser_Items_Modules]') AND parent_object_id = OBJECT_ID(N'[dbo].[Connect_DocBrowser_Items]'))
+ALTER TABLE [dbo].[Connect_DocBrowser_Items]  WITH CHECK ADD  CONSTRAINT [FK_Connect_DocBrowser_Items_Modules] FOREIGN KEY([ModuleId])
+REFERENCES [dbo].[Modules] ([ModuleID])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Connect_DocBrowser_Items_Modules]') AND parent_object_id = OBJECT_ID(N'[dbo].[Connect_DocBrowser_Items]'))
+ALTER TABLE [dbo].[Connect_DocBrowser_Items] CHECK CONSTRAINT [FK_Connect_DocBrowser_Items_Modules]
+GO
+
+
+TRIGGERS
+VIEWS
+FUNCTIONS
+SPROCS
+Adding Connect_DocBrowser_GetTopic
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Connect_DocBrowser_GetTopic]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Connect_DocBrowser_GetTopic]
+GO
+
+
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE PROCEDURE dbo.Connect_DocBrowser_GetTopic
+ @ModuleId INT,
+ @Locale VARCHAR(10),
+ @Version VARCHAR(12),
+ @Edition INT,
+ @Topic VARCHAR(200)
+AS
+SELECT
+ i2.*
+FROM dbo.Connect_DocBrowser_Items i2
+INNER JOIN
+(SELECT
+ i.Topic,
+ MAX(i.Version) MaxVersion
+FROM dbo.Connect_DocBrowser_Items i
+GROUP BY i.ModuleId, i.Locale, i.Version, i.Edition, i.Topic
+HAVING
+ i.ModuleId=@ModuleId
+ AND i.Locale=@Locale
+ AND i.Version <= @Version
+ AND (i.Edition & @Edition > 0 OR i.Edition=0)) x ON i2.Topic=x.Topic AND i2.Version=x.MaxVersion
+WHERE
+ i2.ModuleId=@ModuleId
+ AND i2.Locale=@Locale
+ AND (i2.Edition & @Edition > 0 OR i2.Edition=0)
+ AND i2.Topic=@Topic
+
+GO
+
+
+Adding Connect_DocBrowser_GetTopicList
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Connect_DocBrowser_GetTopicList]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Connect_DocBrowser_GetTopicList]
+GO
+
+
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE PROCEDURE dbo.Connect_DocBrowser_GetTopicList
+ @ModuleId INT,
+ @Locale VARCHAR(10),
+ @Version VARCHAR(12),
+ @Edition INT
+AS
+SELECT
+ i2.Topic
+FROM dbo.Connect_DocBrowser_Items i2
+INNER JOIN
+(SELECT
+ i.Topic,
+ MAX(i.Version) MaxVersion
+FROM dbo.Connect_DocBrowser_Items i
+GROUP BY i.ModuleId, i.Locale, i.Version, i.Edition, i.Topic
+HAVING
+ i.ModuleId=@ModuleId
+ AND i.Locale=@Locale
+ AND i.Version <= @Version
+ AND (i.Edition & @Edition > 0 OR i.Edition=0)) x ON i2.Topic=x.Topic AND i2.Version=x.MaxVersion
+WHERE
+ i2.ModuleId=@ModuleId
+ AND i2.Locale=@Locale
+ AND (i2.Edition & @Edition > 0 OR i2.Edition=0)
+
+GO
+
+
+Finished Script Creation
+Loaded D:\Webroot\DNNAPI\web.config
+ConnectionString: Data Source=(local);Initial Catalog=dnnapi;User ID=test;Password=test
+ObjectQualifier : 
+DatabaseOwner   : dbo
+FullPattern     : (?<owner>\[?dbo\]?\.)?\[?(?<prefix>\w*)(?<modqualifier>Connect_DocBrowser_)(?<name>\w+)\]?|(?<owner>\[?dbo\]?\.)\[?(?<name>\w+)\]?|(?<=\sJOIN\s+)(?<name>\w+)
+
+Create Uninstall Script
+SPROCS
+Adding Connect_DocBrowser_GetTopic
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Connect_DocBrowser_GetTopic]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Connect_DocBrowser_GetTopic]
+GO
+
+
+Adding Connect_DocBrowser_GetTopicList
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Connect_DocBrowser_GetTopicList]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Connect_DocBrowser_GetTopicList]
+GO
+
+
+VIEWS
+FUNCTIONS
+TRIGGERS
+STRUCTURE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Connect_DocBrowser_Items_Modules]') AND parent_object_id = OBJECT_ID(N'[dbo].[Connect_DocBrowser_Items]'))
+ALTER TABLE [dbo].[Connect_DocBrowser_Items] DROP CONSTRAINT [FK_Connect_DocBrowser_Items_Modules]
+GO
+
+
+TABLES
+Adding Connect_DocBrowser_Items
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Connect_DocBrowser_Items]') AND type in (N'U'))
+DROP TABLE [dbo].[Connect_DocBrowser_Items]
+GO
+
+
+Finished Script Creation
+
+BUILD SUCCEEDED
+
+Total time: 12.2 seconds.
+

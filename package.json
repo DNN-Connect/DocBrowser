@@ -1,10 +1,12 @@
 {
   "name": "docbrowser",
-  "version": "01.00.00",
+  "version": "01.00.01",
   "description": "DNN DocBrowser module",
+  "package": {
+    "@name": "DocBrowser"
+  },
   "dnn": {
     "projectType": "module",
-    "dnnDependency": "08.00.00",
     "name": "Connect.DocBrowser",
     "friendlyName": "DocBrowser Module",
     "packageName": "Connect_DocBrowser",
@@ -17,25 +19,58 @@
       "email": "info@bring2mind.net"
     },
     "module": {
-      "azureCompatible": "true"
+      "azureCompatible": "true",
+      "moduleName": "Connect_DocBrowser",
+      "foldername": "MVC/Connect/DocBrowser",
+      "moduleDefinitions": [
+        {
+          "friendlyName": "Connect DocBrowser",
+          "defaultCacheTime": 0,
+          "moduleControls": [
+            {
+              "controlSrc": "Connect.DNN.Modules.DocBrowser.Controllers/Home/Index.mvc",
+              "supportsPartialRendering": "False",
+              "controlType": "View",
+              "viewOrder": 0
+            }
+          ]
+        }
+      ]
     },
-    "packagesPath": "./_Packages",
-    "pathToScripts": "./_Installation/SQL",
-    "pathToSupplementaryFiles": "./_Installation",
-    "pathToAssemblies": "./bin",
-    "manifest": "./_Installation/Connect.DocBrowser.dnn",
-    "excludeFilter": [
-      "_BuildSupport",
-      "_Development",
-      "_Packages",
-      "node_modules",
-      "bin",
-      "obj"
-    ],
-    "zipName": "Connect.DocBrowser"
+    "pathsAndFiles": {
+      "devFolder": "./DocBrowser",
+      "packagesPath": "./Releases",
+      "pathToScripts": "./Installation/scripts",
+      "pathToSupplementaryFiles": "./Installation",
+      "pathToAssemblies": "./DocBrowser/bin",
+      "assemblies": [
+        "Connect.DNN.Modules.DocBrowser.dll",
+        "Connect.DocBrowser.Core.dll",
+        "Markdig.dll"
+      ],
+      "excludeFilter": [
+        "DocBrowser/bin/",
+        "DocBrowser/obj/",
+        "bin/",
+        "obj/"
+      ],
+      "zipName": "Connect.DocBrowser",
+      "releaseFiles": [
+        "App_LocalResources/*.resx",
+        "**/*.ascx",
+        "Views/**/*.cshtml",
+        "js/*.js",
+        "css/*.css",
+        "*.css",
+        "**/*.html",
+        "**/*.png",
+        "**/*.gif",
+        "*.txt"
+      ]
+    }
   },
   "scripts": {
-    "build": "node_modules\\.bin\\webpack",
+    "build": "node_modules\\.bin\\webpack -p",
     "watch": "node_modules\\.bin\\webpack --progress --colors --watch"
   },
   "devDependencies": {

@@ -3,10 +3,9 @@ var path = require('path'),
 
 module.exports = {
     context: path.resolve(__dirname, '.'),
-    entry: "./js/src/App.tsx",
+    entry: "./js/App.tsx",
     output: {
-        path: path.resolve(__dirname, './js'),
-        publicPath: '/js/',
+        path: path.resolve(__dirname, './DocBrowser/js'),
         filename: 'connect-docbrowser.js'
     },
     devtool: '#source-map',
@@ -28,8 +27,5 @@ module.exports = {
             jQuery: 'jquery',
             'window.jQuery': 'jquery'
         }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: { warnings: false }
-        // })
     ]
 }

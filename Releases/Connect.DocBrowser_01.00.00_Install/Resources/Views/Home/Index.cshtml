@@ -1,0 +1,23 @@
+@inherits DocBrowserWebPage
+@using Connect.DNN.Modules.DocBrowser.Common;
+@using Connect.DocBrowser.Core.Repositories;
+@{
+ DocBrowserModuleContext.AddModuleScript();
+}
+
+<h1>Hello Connect DocBrowser</h1>
+
+<div class="docBrowser mainScreen"
+     data-locale="@System.Threading.Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName"
+     data-moduleid="@Dnn.ActiveModule.ModuleID"
+     data-tabid="@Dnn.ActiveModule.TabID"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(DocBrowserModuleContext.Security))"
+     data-versions="@(Newtonsoft.Json.JsonConvert.SerializeObject(ItemRepository.Instance.GetVersionList(Dnn.ActiveModule.ModuleID)))">
+</div>
+
+@if (DocBrowserModuleContext.Security.IsAdmin)
+{
+ <div class="testButton" data-moduleid="@Dnn.ActiveModule.ModuleID">
+ </div>
+}

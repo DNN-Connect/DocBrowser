@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect.DocBrowser", "Connect.DocBrowser.csproj", "{9787ED77-136C-4053-96A9-BA5A37F3CCE4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect.DocBrowser", "DocBrowser\Connect.DocBrowser.csproj", "{9787ED77-136C-4053-96A9-BA5A37F3CCE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect.DocBrowser.Core", "Connect.DocBrowser.Core\Connect.DocBrowser.Core.csproj", "{450F2FB0-83DC-4219-AFBD-E27B73B14862}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect.DocBrowser.Core", "DocBrowser.Core\Connect.DocBrowser.Core.csproj", "{450F2FB0-83DC-4219-AFBD-E27B73B14862}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
