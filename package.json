@@ -2,9 +2,6 @@
   "name": "docbrowser",
   "version": "01.00.01",
   "description": "DNN DocBrowser module",
-  "package": {
-    "@name": "DocBrowser"
-  },
   "dnn": {
     "projectType": "module",
     "name": "Connect.DocBrowser",
@@ -39,9 +36,6 @@
     },
     "pathsAndFiles": {
       "devFolder": "./DocBrowser",
-      "packagesPath": "./Releases",
-      "pathToScripts": "./Installation/scripts",
-      "pathToSupplementaryFiles": "./Installation",
       "pathToAssemblies": "./DocBrowser/bin",
       "assemblies": [
         "Connect.DNN.Modules.DocBrowser.dll",

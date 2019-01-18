@@ -1,7 +1,7 @@
 #addin nuget:?package=Newtonsoft.Json&version=9.0.1
 #addin "Cake.FileHelpers"
 #addin "Cake.Npm"
-#reference "BuildSupport/netstandard2.0/Connect.CakeUtils.dll"
+#reference "BuildSupport/Connect.CakeUtils.dll"
 
 using Connect.CakeUtils;
 using Connect.CakeUtils.Compression;
