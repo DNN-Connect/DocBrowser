@@ -105,10 +105,9 @@ UpgradeLog*.XML
 node_modules
 bower_components
 packages/
-_Packages
+Releases
 js/*.js
 tools/
-
-_BuildSupport
-_Development
+BuildSupport
+Development
 
