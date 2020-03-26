@@ -88,7 +88,7 @@
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "gulp-zip": "^4.1.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.0",
     "less-plugin-clean-css": "^1.5.1",
     "merge2": "^1.2.2",
     "ts-loader": "3.5.0",
